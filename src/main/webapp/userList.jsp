@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>User list</title>
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
 <h2><a href="index.html">Home</a></h2>
