@@ -7,11 +7,11 @@ package ru.javawebinar.topjava.util.exception;
  */
 public class ExceptionUtil {
     public static void checkNotFoundWithId(boolean found, int id) {
-        checkNotFound(found, "id=" + id);
+        checkNotFound(found, "getId=" + id);
     }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
-        return checkNotFound(object, "id=" + id);
+        return checkNotFound(object, "getId=" + id);
     }
 
     public static <T> T checkNotFound(T object, String msg) {

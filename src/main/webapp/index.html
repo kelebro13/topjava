@@ -2,14 +2,44 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Java Enterprise (Topjava)</title>
+    <title>Подсчет калорий</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
 </head>
 <body>
-<h2>Проект "<a href="https://github.com/JavaWebinar/topjava07" target="_blank">Java Enterprise (Topjava)"</a></h2>
-<hr>
-<ul>
-    <li><a href="users">User List</a></li>
-    <li><a href="meals">Meal List</a></li>
-</ul>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Подсчет калорий</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form action="users" class="navbar-form navbar-right" method="post">
+                <div class="form-group">
+                    <select class="form-control" name="userNumber">
+                        <option disabled >Выберите пользователя</option>
+                        <option value="1">User 1</option>
+                        <option value="2">User 2</option>
+                    </select>
+                </div>
+                <input class="btn btn-success" type="submit" value="Войти &#187"/>
+            </form>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 50px;"></div>
+<div class="jumbotron">
+    <div class="container">
+        <p>
+            List Users: <b>User 1</b> and <b>User 2</b>
+        </p>
+        <p></p>
+        <button class="btn btn-primary btn-lg">Зарегистрироваться &#187</button>
+    </div>
+</div>
+<div class="container">
+    <a href="https://github.com/JavaWebinar/topjava07" target="_blank">Java Enterprise (Topjava)</a>
+</div>
+
+
 </body>
 </html>

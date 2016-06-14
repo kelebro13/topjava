@@ -6,7 +6,6 @@
     <title>Meal</title>
     <style>
         dl {
-            background: none repeat scroll 0 0 #FAFAFA;
             margin: 8px 0;
             padding: 0;
         }
@@ -22,10 +21,23 @@
             vertical-align: top;
         }
     </style>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
 </head>
 <body>
-<section>
-    <h2><a href="">Home</a></h2>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Подсчет калорий</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <a class="btn btn-primary navbar-btn navbar-right" href="index.html">Выйти</a>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 50px;"></div>
+<div class="jumbotron">
+    <div class="container">
+    <div class="col-sm-6">
     <h3>Edit meal</h3>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.UserMeal" scope="request"/>
@@ -33,19 +45,21 @@
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt>DateTime:</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime"></dd>
+            <dd><input class="form-control" type="datetime-local" value="${meal.dateTime}" name="dateTime"></dd>
         </dl>
         <dl>
             <dt>Description:</dt>
-            <dd><input type="text" value="${meal.description}" size=40 name="description"></dd>
+            <dd><input class="form-control" type="text" value="${meal.description}" size=40 name="description"></dd>
         </dl>
         <dl>
             <dt>Calories:</dt>
-            <dd><input type="number" value="${meal.calories}" name="calories"></dd>
+            <dd><input class="form-control" type="number" value="${meal.calories}" name="calories"></dd>
         </dl>
-        <button type="submit">Save</button>
-        <button onclick="window.history.back()">Cancel</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+        <button class="btn btn-danger" onclick="window.history.back()">Cancel</button>
     </form>
-</section>
+        </div>
+    </div>
+    </div>
 </body>
 </html>

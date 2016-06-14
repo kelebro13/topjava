@@ -87,7 +87,7 @@ public class User extends NamedEntity {
     @Override
     public String toString() {
         return "User (" +
-                "id=" + id +
+                "getId=" + id +
                 ", email=" + email +
                 ", name=" + name +
                 ", enabled=" + enabled +
