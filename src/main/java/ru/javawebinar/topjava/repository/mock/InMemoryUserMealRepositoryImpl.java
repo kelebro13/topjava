@@ -67,13 +67,15 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
         if (userMeal.isNew()) {
             userMeal.setId(counter.incrementAndGet());
             repository.get(userId).put(userMeal.getId(), userMeal);
+            LOG.info("save " + userMeal);
+            return userMeal;
         }
 
         if (!repository.get(userId).containsKey(userMeal.getId())) {
             return null;
         }
         repository.get(userId).put(userMeal.getId(), userMeal);
-        LOG.info("save " + userMeal);
+        LOG.info("update " + userMeal);
         return userMeal;
     }
 
@@ -123,7 +125,7 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
 
     @Override
     public List<UserMealWithExceed> getFiltered(int userId, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        LOG.info("getAll");
+        LOG.info("getFiltered");
         List<UserMealWithExceed> list = getAll(userId)
                 .stream()
                 .filter((um) -> TimeUtil.isBetweenDate(um.getDateTime().toLocalDate(), startDate, endDate))
