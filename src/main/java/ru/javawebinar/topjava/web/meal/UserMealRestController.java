@@ -6,11 +6,14 @@ import ru.javawebinar.topjava.LoggedUser;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.to.UserMealWithExceed;
 import ru.javawebinar.topjava.service.UserMealService;
+import ru.javawebinar.topjava.util.TimeUtil;
+import ru.javawebinar.topjava.util.UserMealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -23,15 +26,14 @@ public class UserMealRestController {
     private UserMealService service;
 
     public List<UserMealWithExceed> getAll(){
-        return service.getAll(LoggedUser.getId());
+        return UserMealsUtil.getWithExceeded(service.getAll(LoggedUser.getId()), LoggedUser.getCaloriesPerDay());
     }
 
     public List<UserMealWithExceed> getFiltered(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime){
-        if(startDate == null) startDate = LocalDate.MIN;
-        if(endDate == null) endDate = LocalDate.MAX;
-        if(startTime == null) startTime = LocalTime.MIN;
-        if(endTime == null) endTime = LocalTime.MAX;
-        return service.getFiltered(LoggedUser.getId(), startDate, startTime, endDate, endTime);
+        return getAll().stream()
+                .filter((um) -> TimeUtil.isBetweenDate(um.getDateTime().toLocalDate(), (startDate == null ? LocalDate.MIN : startDate), (endDate == null ? LocalDate.MAX : endDate)))
+                .filter((um) -> TimeUtil.isBetweenTime(um.getDateTime().toLocalTime(), (startTime == null ? LocalTime.MIN : startTime), (endTime == null ? LocalTime.MAX : endTime)))
+                .collect(Collectors.toList());
     }
 
     public UserMeal get(int id) throws NotFoundException {
