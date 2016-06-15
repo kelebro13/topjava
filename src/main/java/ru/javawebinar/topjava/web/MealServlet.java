@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.UserMeal;
+import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.web.meal.UserMealRestController;
 
 import javax.servlet.ServletConfig;
@@ -41,28 +42,28 @@ public class MealServlet extends HttpServlet {
         if (request.getParameterMap().containsKey("startDate")) {
             LocalDate startDate = null;
             if(!request.getParameter("startDate").isEmpty()){
-                startDate = LocalDate.parse(request.getParameter("startDate"));
+                startDate = TimeUtil.getDate(request.getParameter("startDate"));
             }
             LocalDate endDate = null;
             if(!request.getParameter("endDate").isEmpty()){
-                endDate = LocalDate.parse(request.getParameter("endDate"));
+                endDate = TimeUtil.getDate(request.getParameter("endDate"));
             }
             LocalTime startTime = null;
             if(!request.getParameter("startTime").isEmpty()){
-                startTime = LocalTime.parse(request.getParameter("startTime"));
+                startTime = TimeUtil.getTime(request.getParameter("startTime"));
             }
             LocalTime endTime = null;
             if(!request.getParameter("endTime").isEmpty()){
-                endTime = LocalTime.parse(request.getParameter("endTime"));
+                endTime = TimeUtil.getTime(request.getParameter("endTime"));
             }
-            request.setAttribute("mealList", controller.getAll(startDate, startTime, endDate, endTime));
+            request.setAttribute("mealList", controller.getFiltered(startDate, startTime, endDate, endTime));
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         }
 
 
         String id = request.getParameter("id");
         UserMeal userMeal = new UserMeal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
+                TimeUtil.getDateTime(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories")));
         LOG.info(userMeal.isNew() ? "Create {}" : "Update {}", userMeal);

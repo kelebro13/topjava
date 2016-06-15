@@ -23,4 +23,16 @@ public class TimeUtil {
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TME_FORMATTER);
     }
+
+    public static LocalDateTime getDateTime(String date) {
+        return LocalDateTime.parse(date);
+    }
+
+    public static LocalDate getDate(String date) {
+        return LocalDate.parse(date);
+    }
+
+    public static LocalTime getTime(String date) {
+        return LocalTime.parse(date);
+    }
 }

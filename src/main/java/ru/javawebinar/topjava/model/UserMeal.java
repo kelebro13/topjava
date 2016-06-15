@@ -40,7 +40,7 @@ public class UserMeal extends BaseEntity {
     @Override
     public String toString() {
         return "UserMeal{" +
-                "getId=" + id +
+                "id=" + id +
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +

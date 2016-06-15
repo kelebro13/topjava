@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.UserMeal;
+import ru.javawebinar.topjava.model.to.UserMealWithExceed;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,5 +18,7 @@ public interface UserMealRepository {
 
     UserMeal get(int userId, int id);
 
-    List<UserMeal> getAll(int userId, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime);
+    List<UserMealWithExceed> getAll(int userId);
+
+    List<UserMealWithExceed> getFiltered(int userId, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime);
 }
