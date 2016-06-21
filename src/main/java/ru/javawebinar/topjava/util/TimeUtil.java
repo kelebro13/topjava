@@ -25,6 +25,10 @@ public class TimeUtil {
         return ldt == null ? "" : ldt.format(DATE_TME_FORMATTER);
     }
 
+    public static LocalDateTime parseLocalDateTime(String str) {
+        return StringUtils.isEmpty(str) ? null : LocalDateTime.parse(str, DATE_TME_FORMATTER);
+    }
+
     public static LocalDate parseLocalDate(String str) {
         return StringUtils.isEmpty(str) ? null : LocalDate.parse(str);
     }
