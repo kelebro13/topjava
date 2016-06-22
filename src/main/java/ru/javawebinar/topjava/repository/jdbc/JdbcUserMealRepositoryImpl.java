@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * User: gkislin
@@ -50,7 +49,7 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
     @Override
     public UserMeal save(UserMeal userMeal, int userId) {
         Objects.requireNonNull(userMeal);
-        
+
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", userMeal.getId())
                 .addValue("dateTime", userMeal.getDateTime())
@@ -61,13 +60,14 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
         if (userMeal.isNew()) {
             Number newKey = insertMeal.executeAndReturnKey(map);
             userMeal.setId(newKey.intValue());
-        } else if(get(userMeal.getId(), userId) != null) {
-            namedParameterJdbcTemplate.update(
-                    "UPDATE meals SET id=:id, datetime=:dateTime, " +
-                            "description=:description, calories=:calories, user_id=:userId WHERE id=:id", map
-            );
         } else {
-            return null;
+            if (namedParameterJdbcTemplate.update(
+                    "UPDATE meals SET id=:id, datetime=:dateTime, " +
+                            "description=:description, calories=:calories WHERE id=:id AND user_id=:userId", map
+            ) == 0) {
+                return null;
+            }
+
         }
         return userMeal;
     }
@@ -86,8 +86,8 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
 
     @Override
     public List<UserMeal> getAll(int userId) {
-        List<UserMeal> userMeals = jdbcTemplate.query("SELECT  * FROM meals WHERE user_id=?", ROW_MAPPER, userId);
-        return userMeals == null ? Collections.emptyList() : userMeals.stream().sorted(USER_MEAL_COMPARATOR).collect(Collectors.toList());
+        List<UserMeal> userMeals = jdbcTemplate.query("SELECT  * FROM meals WHERE user_id=? ORDER BY datetime DESC", ROW_MAPPER, userId);
+        return userMeals == null ? Collections.emptyList() : userMeals;
     }
 
     @Override
@@ -95,11 +95,8 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
 
-//        List<UserMeal> userMeals = jdbcTemplate.query("SELECT  * FROM meals WHERE user_id=? and datetime >= ? and datetime <= ?"
-//                , ROW_MAPPER, userId, Timestamp.valueOf(startDate), Timestamp.valueOf(endDate));
-
-        List<UserMeal> userMeals = jdbcTemplate.query("SELECT  * FROM meals WHERE user_id=? and datetime BETWEEN ? and ?"
+        List<UserMeal> userMeals = jdbcTemplate.query("SELECT  * FROM meals WHERE user_id=? and datetime BETWEEN ? and ? ORDER BY datetime DESC"
                 , ROW_MAPPER, userId, Timestamp.valueOf(startDate), Timestamp.valueOf(endDate));
-        return userMeals == null ? Collections.emptyList() : userMeals.stream().sorted(USER_MEAL_COMPARATOR).collect(Collectors.toList());
+        return userMeals == null ? Collections.emptyList() : userMeals;
     }
 }

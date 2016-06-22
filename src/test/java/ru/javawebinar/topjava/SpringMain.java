@@ -3,7 +3,6 @@ package ru.javawebinar.topjava;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
-import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.web.meal.UserMealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
@@ -13,6 +12,8 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.javawebinar.topjava.UserTestData.*;
+
 /**
  * User: gkislin
  * Date: 22.08.2014
@@ -20,12 +21,10 @@ import java.util.List;
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml")) {
+        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("classpath:spring/spring-app-test.xml")) {
             System.out.println(Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            DbPopulator populator = appCtx.getBean(DbPopulator.class);
-            populator.execute();
-            System.out.println(adminUserController.get(UserTestData.USER_ID));
+            System.out.println(adminUserController.create(USER));
             System.out.println();
 
             UserMealRestController mealController = appCtx.getBean(UserMealRestController.class);

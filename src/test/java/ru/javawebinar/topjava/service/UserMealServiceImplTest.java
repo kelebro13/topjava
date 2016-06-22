@@ -8,10 +8,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.DbPopulator;
+import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 
@@ -42,17 +44,17 @@ public class UserMealServiceImplTest {
     @Test
     public void testSave() throws Exception {
         UserMeal userMeal = new UserMeal(LocalDateTime.now(), "Чай", 25);
-        service.save(userMeal, ADMIN_ID);
-        userMeal.setId(null);
-        repository.save(userMeal, ADMIN_ID);
-        MATCHER.assertEquals(repository.get(100010, ADMIN_ID), service.get(100010,ADMIN_ID));
+        UserMeal created = service.save(userMeal, ADMIN_ID);
+        userMeal.setId(created.getId());
+        save(userMeal, ADMIN_ID);
+        MATCHER.assertCollectionEquals(getUserMealList(ADMIN_ID), service.getAll(ADMIN_ID));
     }
 
     @Test
     public void testDelete() throws Exception {
         service.delete(100002, USER_ID);
-        repository.delete(100002, USER_ID);
-        MATCHER.assertCollectionEquals(repository.getAll(USER_ID), service.getAll(USER_ID));
+        delete(100002, USER_ID);
+        MATCHER.assertCollectionEquals(getUserMealList(USER_ID), service.getAll(USER_ID));
     }
 
 
@@ -65,7 +67,7 @@ public class UserMealServiceImplTest {
     @Test
     public void testGet() throws Exception {
         UserMeal userMealFromDB = service.get(100002, USER_ID);
-        UserMeal userMealFromMemory = repository.get(100002, USER_ID);
+        UserMeal userMealFromMemory = get(100002, USER_ID);
         MATCHER.assertEquals(userMealFromMemory, userMealFromDB);
     }
 
@@ -78,7 +80,7 @@ public class UserMealServiceImplTest {
     @Test
     public void getAll() throws Exception {
         List<UserMeal> listFromDB = (List<UserMeal>) service.getAll(USER_ID);
-        List<UserMeal> listTest = (List<UserMeal>) repository.getAll(USER_ID);
+        List<UserMeal> listTest = getUserMealList(USER_ID);
         MATCHER.assertCollectionEquals(listTest, listFromDB);
     }
 
@@ -87,7 +89,9 @@ public class UserMealServiceImplTest {
         LocalDateTime start = LocalDateTime.of(2016, 05, 30, 00, 00);
         LocalDateTime end = LocalDateTime.of(2016, 05, 30, 23, 59);
         List<UserMeal> listFromDB = (List<UserMeal>) service.getBetweenDateTimes(start, end, USER_ID);
-        List<UserMeal> listFromMemory = (List<UserMeal>) repository.getBetween(start, end, USER_ID);
+        List<UserMeal> listFromMemory = getUserMealList(USER_ID).stream()
+                .filter(userMeal -> TimeUtil.isBetween(userMeal.getDateTime(), start, end))
+                .collect(Collectors.toList());
         MATCHER.assertCollectionEquals(listFromMemory, listFromDB);
     }
 
@@ -96,12 +100,17 @@ public class UserMealServiceImplTest {
         UserMeal userMeal = service.get(100008, ADMIN_ID);
         userMeal.setCalories(777);
         service.update(userMeal, ADMIN_ID);
-        repository.save(userMeal, ADMIN_ID);
-        MATCHER.assertEquals(repository.get(100008, ADMIN_ID), service.get(100008, ADMIN_ID));
+
+        UserMeal userMeal1 = get(100008, ADMIN_ID);
+        userMeal1.setCalories(777);
+        save(userMeal1, ADMIN_ID);
+
+        MATCHER.assertCollectionEquals(getUserMealList(ADMIN_ID), service.getAll(ADMIN_ID));
     }
 
     @Test(expected = NotFoundException.class)
     public void testUpdateSomeoneElseMeal() throws Exception {
-        service.update(service.get(100008, ADMIN_ID), USER_ID);
+        UserMeal userMeal = service.get(100008, ADMIN_ID);
+        service.update(userMeal, USER_ID);
     }
 }

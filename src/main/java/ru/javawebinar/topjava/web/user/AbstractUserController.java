@@ -34,7 +34,7 @@ public abstract class AbstractUserController {
     }
 
     public void delete(int id) {
-//        LOG.info("delete " + id);
+        LOG.info("delete " + id);
         service.delete(id);
     }
 
