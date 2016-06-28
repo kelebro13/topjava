@@ -33,12 +33,13 @@ public class JpaUserMealRepositoryImpl implements UserMealRepository {
             em.persist(userMeal);
             return userMeal;
         } else {
-            UserMeal um = em.getReference(UserMeal.class, userMeal.getId());
-            if (um.getUser().getId() == userId) {
-                userMeal.setUser(ref);
-                return em.merge(userMeal);
-            }
-            return null;
+            return (em.createQuery("UPDATE UserMeal m SET m.id=:id, m.dateTime=:dateTime, m.description=:description," +
+                    " m.calories=:calories WHERE m.id=:id AND m.user.id =:userId")
+                    .setParameter("id", userMeal.getId())
+                    .setParameter("dateTime", userMeal.getDateTime())
+                    .setParameter("description", userMeal.getDescription())
+                    .setParameter("calories", userMeal.getCalories())
+                    .setParameter("userId", userId).executeUpdate() == 0 ? null : userMeal);
         }
     }
 
