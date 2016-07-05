@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
@@ -39,6 +40,11 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) throws NotFoundException {
         Objects.requireNonNull(email, "Email must not be empty");
         return ExceptionUtil.checkNotFound(repository.getByEmail(email), "email=" + email);
+    }
+
+    @Transactional
+    public User getUserAndMeal(int userId) {
+        return repository.getUserAndMeal(userId);
     }
 
     @Cacheable("users")

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 
@@ -22,8 +24,8 @@ import java.util.List;
  */
 
 @Repository
-public class JdbcUserMealRepositoryImpl implements UserMealRepository {
-
+@Profile(Profiles.POSTGRES)
+public class JdbcPostgresUserMealRepositoryImpl implements UserMealRepository{
     private static final RowMapper<UserMeal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(UserMeal.class);
 
     @Autowired
@@ -35,7 +37,7 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
     private SimpleJdbcInsert insertUserMeal;
 
     @Autowired
-    public JdbcUserMealRepositoryImpl(DataSource dataSource) {
+    public JdbcPostgresUserMealRepositoryImpl(DataSource dataSource) {
         this.insertUserMeal = new SimpleJdbcInsert(dataSource)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");

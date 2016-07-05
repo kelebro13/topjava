@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
@@ -26,7 +25,6 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
     private EntityManager em;
 
     @Override
-    @Transactional
     public UserMeal save(UserMeal userMeal, int userId)
     {
         if (!userMeal.isNew() && get(userMeal.getId(), userId) == null) {
@@ -55,5 +53,10 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
     @Override
     public List<UserMeal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return proxy.findAllByDateTimeBetweenAndUserIdOrderByDateTimeDesc(startDate, endDate, userId);
+    }
+
+    @Override
+    public UserMeal getUserAndMeal(int id, int userId) {
+        return proxy.getUserAndMeal(id, userId);
     }
 }

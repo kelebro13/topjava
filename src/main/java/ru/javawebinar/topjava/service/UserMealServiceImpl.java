@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
@@ -47,5 +48,10 @@ public class UserMealServiceImpl implements UserMealService {
     @Override
     public UserMeal save(UserMeal meal, int userId) {
         return repository.save(meal, userId);
+    }
+
+    @Transactional
+    public UserMeal getUserAndMeal(int id, int userId) {
+        return repository.getUserAndMeal(id, userId);
     }
 }
