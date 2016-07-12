@@ -3,12 +3,10 @@
 
 <html>
 <head>
-    <title>Meal</title>
-    <link rel="stylesheet" href="css/style.css">
+    <jsp:include page="fragments/headTag.jsp"/>
 </head>
 <body>
 <section>
-    <h2><a href="index.html">Home</a></h2>
     <h3>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h3>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.UserMeal" scope="request"/>
@@ -30,5 +28,6 @@
         <button onclick="window.history.back()">Cancel</button>
     </form>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

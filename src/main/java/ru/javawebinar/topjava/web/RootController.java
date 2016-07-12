@@ -24,6 +24,11 @@ public class RootController {
         return "index";
     }
 
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String home() {
+        return "index";
+    }
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String userList(Model model) {
         model.addAttribute("userList", service.getAll());
