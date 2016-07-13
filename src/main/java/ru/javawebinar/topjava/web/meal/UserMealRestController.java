@@ -34,10 +34,9 @@ public class UserMealRestController extends AbstractUserMealController {
         return "redirect:meals";
     }
 
-    @RequestMapping(value = "/meals", params = {"action=delete", "id"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/mealsdelete", method = RequestMethod.GET)
     public String delete(@RequestParam("id") Integer i) {
-        int id = i;
-        super.delete(id);
+        super.delete(i);
         return "redirect:meals";
     }
 
@@ -48,7 +47,7 @@ public class UserMealRestController extends AbstractUserMealController {
         return "mealList";
     }
 
-    @RequestMapping(value = "/meals", params = "action=update", method = RequestMethod.GET)
+    @RequestMapping(value = "/mealsupdate", method = RequestMethod.GET)
     public ModelAndView update(HttpServletRequest request) {
         int id = Integer.valueOf(request.getParameter("id"));
         UserMeal meal = super.get(id);
@@ -57,7 +56,7 @@ public class UserMealRestController extends AbstractUserMealController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/meals", params = "action=create", method = RequestMethod.GET)
+    @RequestMapping(value = "/mealscreate", method = RequestMethod.GET)
     public ModelAndView create() {
         UserMeal meal = new UserMeal(LocalDateTime.now().withNano(0).withSecond(0), " ", 1000);
         meal = super.create(meal);
@@ -67,7 +66,7 @@ public class UserMealRestController extends AbstractUserMealController {
     }
 
 
-    @RequestMapping(value = "/meals", params = "action=filter", method = RequestMethod.POST)
+    @RequestMapping(value = "/mealsfilter", method = RequestMethod.POST)
     public ModelAndView getBetween(HttpServletRequest request) {
         LocalDate startDate = TimeUtil.parseLocalDate(resetParam("startDate", request));
         LocalDate endDate = TimeUtil.parseLocalDate(resetParam("endDate", request));

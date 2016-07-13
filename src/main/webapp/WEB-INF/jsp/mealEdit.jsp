@@ -7,9 +7,9 @@
 </head>
 <body>
 <section>
-    <h3>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h3>
-    <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.UserMeal" scope="request"/>
+    <h3>${meal.description == ' ' ? 'Create meal' : 'Edit meal'}</h3>
+    <hr>
     <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>

@@ -128,6 +128,10 @@ public class User extends NamedEntity {
         return meals;
     }
 
+    public void setRoles(Collection<Role> roles) {
+        this.roles = EnumSet.copyOf(roles);
+    }
+
     @Override
     public String toString() {
         return "User (" +

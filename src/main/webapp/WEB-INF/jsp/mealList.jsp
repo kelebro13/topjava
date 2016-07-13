@@ -10,7 +10,7 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <h3><fmt:message key="meals.title"/></h3>
-    <form method="post" action="meals?action=filter">
+    <form method="post" action="mealsfilter">
         <dl>
             <dt>From Date:</dt>
             <dd><input type="date" name="startDate" value="${startDate}"></dd>
@@ -30,7 +30,7 @@
         <button type="submit">Filter</button>
     </form>
     <hr>
-    <a href="meals?action=create">Add Meal</a>
+    <a href="mealscreate">Add Meal</a>
     <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -52,8 +52,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
-                <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
+                <td><a href="mealsupdate?id=${meal.id}">Update</a></td>
+                <td><a href="mealsdelete?id=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
