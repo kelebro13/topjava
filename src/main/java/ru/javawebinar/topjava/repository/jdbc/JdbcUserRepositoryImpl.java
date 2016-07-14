@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -15,8 +14,6 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.RoleUtil;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +59,10 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(map);
             user.setId(newKey.intValue());
-            pastRoles(user);
+            insertRoles(user);
         } else {
             deleteRoles(user);
-            pastRoles(user);
+            insertRoles(user);
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map);
@@ -93,35 +90,30 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         List<User> listUsers = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
-        Map<Integer, List<RoleUtil>> roles = jdbcTemplate.query("SELECT user_id, role FROM user_roles", new RowMapper<RoleUtil>() {
-            @Override
-            public RoleUtil mapRow(ResultSet rs, int rowNum) throws SQLException {
-                RoleUtil roleUtil = new RoleUtil(
-                        rs.getInt("user_id"),
-                        Role.valueOf(rs.getString("role")));
-                return roleUtil;
-            }
+        Map<Integer, List<RoleUtil>> roles = jdbcTemplate.query("SELECT user_id, role FROM user_roles", (rs, rowNum) -> {
+            RoleUtil roleUtil = new RoleUtil(
+                    rs.getInt("user_id"),
+                    Role.valueOf(rs.getString("role")));
+            return roleUtil;
         }).stream().collect(Collectors.groupingBy(RoleUtil::getId));
         listUsers.forEach(u -> u.setRoles(roles.get(u.getId()).stream().map(roleUtil -> roleUtil.getRole()).collect(Collectors.toList())));
         return listUsers;
     }
 
-    public void pastRoles(User user) {
+    public void insertRoles(User user) {
         Set<Role> roles = user.getRoles();
-        int user_id = user.getId();
+        int userId = user.getId();
         Iterator<Role> iterator = roles.iterator();
-            jdbcTemplate.update("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", user_id, iterator.next().name());
-
+        while(iterator.hasNext()) {
+            jdbcTemplate.update("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", userId, iterator.next().name());
+        }
     }
 
     public User setRoles(User user) {
         if(user == null) return null;
-        List<Role> roleList = jdbcTemplate.query("SELECT role FROM user_roles WHERE user_id=?", new RowMapper<Role>() {
-            @Override
-            public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Role role = Role.valueOf(rs.getString("role"));
-                return role;
-            }
+        List<Role> roleList = jdbcTemplate.query("SELECT role FROM user_roles WHERE user_id=?", (rs, rowNum) -> {
+            Role role = Role.valueOf(rs.getString("role"));
+            return role;
         }, user.getId());
         user.setRoles(roleList);
         return user;
