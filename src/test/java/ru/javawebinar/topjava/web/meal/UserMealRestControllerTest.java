@@ -13,8 +13,6 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -56,6 +54,7 @@ public class UserMealRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(put(REST_URL + MEAL1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         MATCHER.assertEquals(updated, mealService.get(MEAL1_ID, USER_ID));
@@ -68,6 +67,7 @@ public class UserMealRestControllerTest extends AbstractControllerTest {
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(expected)))
+                .andDo(print())
                 .andExpect(status().isCreated());
 
         UserMeal returned = MATCHER.fromJsonAction(action);
@@ -79,7 +79,7 @@ public class UserMealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetBetween() throws Exception {
-        mockMvc.perform(get(REST_URL + "filter?startDate=" + LocalDateTime.of(2015, Month.MAY, 31, 12, 00).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+        mockMvc.perform(get(REST_URL + "filter?startDate=2015-05-31T12:00:00"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -89,6 +89,7 @@ public class UserMealRestControllerTest extends AbstractControllerTest {
     @Test
     public void testGetAll() throws Exception {
         mockMvc.perform(get(REST_URL))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_WITH_EXCEED_MATCHER.contentListMatcher(UserMealsUtil.getWithExceeded(USER_MEALS, 2000)));
