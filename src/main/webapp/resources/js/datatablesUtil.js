@@ -11,6 +11,10 @@ function makeEditable() {
 
         updateActive(data);
     });
+
+    $('#filter').click(function () {
+        filter();
+    });
     
     $('#add').click(function () {
         $('#id').val(0);
@@ -42,14 +46,21 @@ function deleteRow(id) {
     });
 }
 
+var fiterDate;
+
 function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.clear();
-        $.each(data, function (key, item) {
-            datatableApi.row.add(item);
-        });
-        datatableApi.draw();
-    });
+    $.ajax({
+        type: 'GET',
+        url: ajaxUrl,
+        data: fiterDate,
+        success: function (data) {
+            datatableApi.clear();
+            $.each(data, function (key, item) {
+                datatableApi.row.add(item);
+            });
+            datatableApi.draw();
+        }
+    })
 }
 
 function save() {
@@ -99,6 +110,23 @@ function updateActive(data) {
     $.ajax({
         type: 'POST',
         url: ajaxUrl + 'active',
-        data: data
+        data: data,
+        success: function () {
+            successNoty('Change Active');
+        }
+
     });
+}
+
+function filter() {
+    debugger;
+    fiterDate = {
+        startDate: $('input#startDate').val(),
+        endDate: $('input#endDate').val(),
+        startTime: $('input#startTime').val(),
+        endTime: $('input#endTime').val()
+    };
+
+    updateTable();
+    successNoty('Filter');
 }

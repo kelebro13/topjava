@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,5 +62,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getWithMeals(int id) {
         return ExceptionUtil.checkNotFoundWithId(repository.getWithMeals(id), id);
+    }
+
+    @Transactional
+    @CacheEvict(value = "users", allEntries = true)
+    @Override
+    public void setActive(int id, boolean active) {
+        User user = get(id);
+        user.setEnabled(active);
+        update(user);
     }
 }

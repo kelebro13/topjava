@@ -18,23 +18,24 @@
                 <div class="form-group">
                     <div class="container">
                         <div class="col-sm-2"><b>From Date:</b></div>
-                        <div class="col-sm-3"><input class="form-control" type="date" name="startDate" value="${startDate}"></div>
+                        <div class="col-sm-3"><input class="form-control" id="startDate" type="date" name="startDate" value="${startDate}"></div>
                         <div class="col-sm-2"><b>To Date:</b></div>
-                        <div class="col-sm-3"><input class="form-control" type="date" name="endDate" value="${endDate}"></div>
+                        <div class="col-sm-3"><input class="form-control" id="endDate" type="date" name="endDate" value="${endDate}"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="container">
                         <div class="col-sm-2"><b>From Time:</b></div>
-                        <div class="col-sm-3"><input class="form-control" type="time" name="startTime" value="${startTime}"></div>
+                        <div class="col-sm-3"><input class="form-control" id="startTime" type="time" name="startTime" value="${startTime}"></div>
                         <div class="col-sm-2"><b>To Time:</b></div>
-                        <div class="col-sm-3"><input class="form-control" type="time" name="endTime" value="${endTime}"></div>
+                        <div class="col-sm-3"><input class="form-control" id="endTime" type="time" name="endTime" value="${endTime}"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="container">
                         <div class="col-sm-10">
-                            <input type="submit" class="btn btn-sm btn-primary pull-right" value="<fmt:message key="meals.filter"/>">
+                            <a class="btn btn-sm btn-primary pull-right" id="filter"><fmt:message key="meals.filter"/></a>
+                            <%--<input type="submit" class="btn btn-sm btn-primary pull-right" value="<fmt:message key="meals.filter"/>">--%>
                         </div>
                     </div>
                 </div>

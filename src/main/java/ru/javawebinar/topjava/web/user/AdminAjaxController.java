@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,10 +40,7 @@ public class AdminAjaxController extends AbstractUserController {
 
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     public void setActive(@RequestParam("id") int id,
-                          @RequestParam("check") boolean check){
-        User user = super.get(id);
-        user.setRoles(Collections.singleton(Role.ROLE_USER));
-        user.setEnabled(check);
-        super.update(user, id);
+                          @RequestParam("check") boolean active){
+        super.setActive(id, active);
     }
 }
