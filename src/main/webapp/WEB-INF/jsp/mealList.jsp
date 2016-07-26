@@ -41,6 +41,7 @@
             </form>
 
             <a class="btn btn-sm btn-info" id="add"><fmt:message key="meals.add"/></a>
+            <hr>
 
             <table class="table table-striped display" id="datatable">
                 <thead>
@@ -54,7 +55,7 @@
                 </thead>
                 <c:forEach items="${mealList}" var="meal">
                     <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.UserMealWithExceed"/>
-                    <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
+                    <tr class="${meal.exceed ? 'exceeded' : 'normal'}" id="${meal.id}">
                         <td>
                                 <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
                                 <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
@@ -62,8 +63,8 @@
                         </td>
                         <td>${meal.description}</td>
                         <td>${meal.calories}</td>
-                        <td><a class="btn btn-xs btn-primary edit" id="${meal.id}">Update</a></td>
-                        <td><a class="btn btn-xs btn-danger delete" id="${meal.id}">Delete</a></td>
+                        <td><a class="btn btn-xs btn-primary edit">Update</a></td>
+                        <td><a class="btn btn-xs btn-danger delete">Delete</a></td>
                     </tr>
                 </c:forEach>
             </table>
@@ -128,37 +129,38 @@
     var ajaxUrl = 'ajax/profile/meals/';
     var datatableApi;
 
-    $(function () {
-        datatableApi = $('#datatable').dataTable({
-            "bPaginate": false,
-            "bInfo": false,
-            "aoColumns": [
-                {
-                    "mData": "dateTime"
-                },
-                {
-                    "mData": "description"
-                },
-                {
-                    "mData": "calories"
-                },
-                {
-                    "sDefaultContent": "Edit",
-                    "bSortable": false
-                },
-                {
-                    "sDefaultContent": "Delete",
-                    "bSortable": false
-                }
-            ],
-            "aaSorting": [
-                [
-                    0,
-                    "asc"
+        $(function () {
+            datatableApi = $('#datatable').DataTable({
+                pading: false,
+                info: false,
+                stateSave: true,
+                columns: [
+                    {
+                        data: "dateTime"
+                    },
+                    {
+                        data: "description"
+                    },
+                    {
+                        data: "calories"
+                    },
+                    {
+                        defaultContent: "Edit",
+                        orderable: false
+                    },
+                    {
+                        defaultContent: "Delete",
+                        orderable: false
+                    }
+                ],
+                order: [
+                    [
+                        0,
+                        "asc"
+                    ]
                 ]
-            ]
-        });
-        makeEditable();
+            });
+            makeEditable();
     });
 </script>
 </html>

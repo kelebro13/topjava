@@ -1,11 +1,24 @@
 function makeEditable() {
+
+    $('.checked').on("click", function () {
+        var userId = $(this).parents('tr').first().attr("id");
+        var userEnabled = $(this).is(":checked");
+
+        var data = {
+            id: userId,
+            check: userEnabled
+        };
+
+        updateActive(data);
+    });
+    
     $('#add').click(function () {
         $('#id').val(0);
         $('#editRow').modal();
     });
 
     $('.delete').click(function () {
-        deleteRow($(this).attr("id"));
+        deleteRow($(this).parents('tr').first().attr("id"));
     });
 
     $('#detailsForm').submit(function () {
@@ -31,11 +44,11 @@ function deleteRow(id) {
 
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApi.fnClearTable();
+        datatableApi.clear();
         $.each(data, function (key, item) {
-            datatableApi.fnAddData(item);
+            datatableApi.row.add(item);
         });
-        datatableApi.fnDraw();
+        datatableApi.draw();
     });
 }
 
@@ -79,5 +92,13 @@ function failNoty(event, jqXHR, options, jsExc) {
         text: 'Failed: ' + jqXHR.statusText + "<br>",
         type: 'error',
         layout: 'bottomRight'
+    });
+}
+
+function updateActive(data) {
+    $.ajax({
+        type: 'POST',
+        url: ajaxUrl + 'active',
+        data: data
     });
 }
