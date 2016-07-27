@@ -9,11 +9,22 @@ function makeEditable() {
             check: userEnabled
         };
 
-        updateActive(data);
+        $.ajax({
+            type: 'POST',
+            url: ajaxUrl + 'active',
+            data: data,
+            success: function () {
+                successNoty('Change Active');
+            }
+
+        });
     });
 
     $('#filter').click(function () {
-        filter();
+        debugger;
+        fiterDate = $('#filterForm').serialize();
+        updateTable();
+        successNoty('Filter');
     });
     
     $('#add').click(function () {
@@ -104,29 +115,4 @@ function failNoty(event, jqXHR, options, jsExc) {
         type: 'error',
         layout: 'bottomRight'
     });
-}
-
-function updateActive(data) {
-    $.ajax({
-        type: 'POST',
-        url: ajaxUrl + 'active',
-        data: data,
-        success: function () {
-            successNoty('Change Active');
-        }
-
-    });
-}
-
-function filter() {
-    debugger;
-    fiterDate = {
-        startDate: $('input#startDate').val(),
-        endDate: $('input#endDate').val(),
-        startTime: $('input#startTime').val(),
-        endTime: $('input#endTime').val()
-    };
-
-    updateTable();
-    successNoty('Filter');
 }

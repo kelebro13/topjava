@@ -14,21 +14,21 @@
             <h3><fmt:message key="meals.title"/></h3>
 
             <!--Form filter-->
-            <form  method="post" action="meals/filter">
+            <form  method="post" id="filterForm">
                 <div class="form-group">
                     <div class="container">
                         <div class="col-sm-2"><b>From Date:</b></div>
-                        <div class="col-sm-3"><input class="form-control" id="startDate" type="date" name="startDate" value="${startDate}"></div>
+                        <div class="col-sm-3"><input class="form-control" type="date" name="startDate" value="${startDate}"></div>
                         <div class="col-sm-2"><b>To Date:</b></div>
-                        <div class="col-sm-3"><input class="form-control" id="endDate" type="date" name="endDate" value="${endDate}"></div>
+                        <div class="col-sm-3"><input class="form-control" type="date" name="endDate" value="${endDate}"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="container">
                         <div class="col-sm-2"><b>From Time:</b></div>
-                        <div class="col-sm-3"><input class="form-control" id="startTime" type="time" name="startTime" value="${startTime}"></div>
+                        <div class="col-sm-3"><input class="form-control" type="time" name="startTime" value="${startTime}"></div>
                         <div class="col-sm-2"><b>To Time:</b></div>
-                        <div class="col-sm-3"><input class="form-control" id="endTime" type="time" name="endTime" value="${endTime}"></div>
+                        <div class="col-sm-3"><input class="form-control" type="time" name="endTime" value="${endTime}"></div>
                     </div>
                 </div>
                 <div class="form-group">
