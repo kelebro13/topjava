@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
@@ -9,7 +9,9 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header navbar-brand"><fmt:message key="app.title"/></div>
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <li>
             <form:form class="navbar-form navbar-right" role="form" action="spring_security_check" method="post">
                 <div class="form-group">
                     <input type="text" placeholder="Email" class="form-control" name='username'>
@@ -19,6 +21,17 @@
                 </div>
                 <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
             </form:form>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="language">
+                        ${pageContext.response.locale}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a onclick="changeLang('en')">English</a></li>
+                        <li><a onclick="changeLang('ru')">Русский</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -41,7 +54,8 @@
 
         <p>Admin login: <b>admin@gmail.com / admin</b></p>
 
-        <p><a class="btn btn-primary btn-lg" role="button" href="register"><fmt:message key="app.register"/> &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" role="button" href="register"><fmt:message key="app.register"/> &raquo;</a>
+        </p>
         <p>Стек технологий: <a href="http://projects.spring.io/spring-security/">Spring Security</a>,
             <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>,
             <a href="http://projects.spring.io/spring-data-jpa/">Spring Data JPA</a>,
@@ -79,4 +93,13 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+    function changeLang(str) {
+        debugger;
+        var url = window.location.href.split('?')[0];
+        window.location.href = url + "?lang=" + str;
+    }
+</script>
 </html>

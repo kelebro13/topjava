@@ -7,15 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
-import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.web.ExceptionInfoHandler;
-import java.time.LocalDateTime;
 
-import java.time.LocalTime;
-import java.time.LocalDate;
-import java.util.List;
-
+import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 /**
  * GKislin
  * 06.03.2015.
@@ -47,7 +46,7 @@ public class UserMealRestController extends AbstractUserMealController implement
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserMeal> createWithLocation(@RequestBody UserMeal meal) {
+    public ResponseEntity<UserMeal> createWithLocation(@Valid UserMeal meal) {
         UserMeal created = super.create(meal);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
