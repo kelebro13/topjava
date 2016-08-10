@@ -6,12 +6,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.util.exception.ValidException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,10 +40,10 @@ public interface ExceptionInfoHandler {
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //422
-    @ExceptionHandler(BindException.class)
+    @ExceptionHandler(ValidException.class)
     @ResponseBody
     @Order(Ordered.HIGHEST_PRECEDENCE + 2)
-    default ErrorInfo bindError(HttpServletRequest req, BindException e) {
+    default ErrorInfo bindError(HttpServletRequest req, ValidException e) {
         return logAndGetErrorInfo(req, e, true);
     }
 
@@ -62,4 +63,14 @@ public interface ExceptionInfoHandler {
         }
         return new ErrorInfo(req.getRequestURL(), e);
     }
+
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //422
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    @Order(Ordered.HIGHEST_PRECEDENCE + 3)
+    default ErrorInfo handleMethodArgumentNotValidException(HttpServletRequest req, MethodArgumentNotValidException error ) {
+
+        return logAndGetErrorInfo(req, new ValidException(error.getBindingResult()), true);
+    }
+
 }

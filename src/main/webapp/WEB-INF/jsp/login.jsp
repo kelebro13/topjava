@@ -22,15 +22,7 @@
                 <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
             </form:form>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="language">
-                        ${pageContext.response.locale}
-                        <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a onclick="changeLang('en')">English</a></li>
-                        <li><a onclick="changeLang('ru')">Русский</a></li>
-                    </ul>
-                </li>
+                <jsp:include page="fragments/language.jsp"/>
             </ul>
         </div>
     </div>
@@ -95,11 +87,4 @@
 </body>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script>
-    function changeLang(str) {
-        debugger;
-        var url = window.location.href.split('?')[0];
-        window.location.href = url + "?lang=" + str;
-    }
-</script>
 </html>

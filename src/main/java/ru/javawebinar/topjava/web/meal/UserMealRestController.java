@@ -41,12 +41,12 @@ public class UserMealRestController extends AbstractUserMealController implement
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@RequestBody UserMeal meal, @PathVariable("id") int id) {
+    public void update(@Valid @RequestBody UserMeal meal, @PathVariable("id") int id) {
         super.update(meal, id);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserMeal> createWithLocation(@Valid UserMeal meal) {
+    public ResponseEntity<UserMeal> createWithLocation(@Valid @RequestBody UserMeal meal) {
         UserMeal created = super.create(meal);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
