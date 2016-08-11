@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.Valid;
 import java.net.URI;
 /**
  * GKislin
@@ -40,12 +41,12 @@ public class UserMealRestController extends AbstractUserMealController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@RequestBody UserMeal meal, @PathVariable("id") int id) {
+    public void update(@Valid @RequestBody UserMeal meal, @PathVariable("id") int id) {
         super.update(meal, id);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserMeal> createWithLocation(@RequestBody UserMeal meal) {
+    public ResponseEntity<UserMeal> createWithLocation(@Valid @RequestBody UserMeal meal) {
         UserMeal created = super.create(meal);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
