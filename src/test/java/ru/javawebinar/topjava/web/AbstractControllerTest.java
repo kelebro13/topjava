@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.javawebinar.topjava.repository.JpaUtil;
+import ru.javawebinar.topjava.repository.datajpa.DataJpaUserRepositoryImpl;
 import ru.javawebinar.topjava.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -67,5 +69,11 @@ abstract public class AbstractControllerTest {
     public void setUp() {
         userService.evictCache();
         jpaUtil.clear2ndLevelHibernateCache();
+        DataJpaUserRepositoryImpl.isTest = true;
+    }
+
+    @After
+    public void setDown(){
+        DataJpaUserRepositoryImpl.isTest = false;
     }
 }
